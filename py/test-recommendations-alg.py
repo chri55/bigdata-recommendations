@@ -62,25 +62,25 @@ spark = (
                 .getOrCreate()
         )
 
-print("CREATE SPARK SESSION")
-print("SET SPARK CONFIGS")
+#print("CREATE SPARK SESSION")
+#print("SET SPARK CONFIGS")
 
 #meta = spark.read.json("gs://metabooks/*.json")
-print("LOADING ratingtable")
+#print("LOADING ratingtable")
 ratingtable = spark.read.json("gs://als-output/als-preprocessed-nonull/*.json")
-print("LOADED ratingtable")
+#print("LOADED ratingtable")
 
-print("CACHING ratingtable")
+#print("CACHING ratingtable")
 ratingtable.cache()
-print("CACHED ratingtable")
+#print("CACHED ratingtable")
 
-print("LOADING metabooks")
+#print("LOADING metabooks")
 meta = spark.read.json("gs://metabooks/*.json")
-print("LOADED METABOOKS")
+#print("LOADED METABOOKS")
 
-print("CACHING  metabooks")
+#print("CACHING  metabooks")
 meta.cache()
-print("CACHED metabooks")
+#print("CACHED metabooks")
 
 app = Flask(__name__)
 
@@ -130,8 +130,8 @@ def toyFunction():
 
     if request.method == "POST":
         result = request.form
-        print(type(result))
-        print(result.to_dict())
+        #print(type(result))
+        #print(result.to_dict())
         ratings = []
         old_titles = []
         for i in range(5):
@@ -149,49 +149,48 @@ def toyFunction():
             data_to_train.append(("unknown_asin", e[0], e[1], "test_user", 2000000001, "random_title"))
 
         df = spark.createDataFrame(data_to_train, ["asin", "asin_index", "overall", "reviewerID", "reviewerID_index", "title"])
-        df.show()
-        als_model = ALSModel.load("gs://als-output/gg-no-re")
-        preds = als_model.transform(df)
-        preds.show()
-        '''
+        #df.show()
+        #als_model = ALSModel.load("gs://als-output/gg-no-re")
+        #preds = als_model.transform(df)
+        #preds.show()
 
         ratingtable = ratingtable.union(df)
 
-        print("instance init")
+        #print("instance init")
         als = ALS(maxIter=20, regParam=0.01, userCol='reviewerID_index', itemCol='asin_index', ratingCol='overall', coldStartStrategy="drop")
-        print("fit model")
-        als_model = als.fit(ratingtable)
+        #print("fit model")
+        als_model = als.fit(ratingtable.select("reviewerID_index", "asin_index", "overall"))
         #print("show preds")
         #preds.show()
-        '''
-        print("recommend for user subset")
+
+        #print("recommend for user subset")
         recs = als_model.recommendForUserSubset(df, 5)
 
         asins = []
         imgUrls = []
 
         #print(recs)
-        print("collecting")
-        recs.show()
-        reclist = recs.where(recs.reviewerID_index in ).select("recommendations").limit(1).collect()
-        print(reclist)
-        print("collected dataframe")
+        #print("collecting")
+        #recs.show()
+        reclist = recs.collect()
+        #print(reclist)
+        #print("collected dataframe")
 
         for e in reclist[0].asDict()["recommendations"]:
-            print("getting title")
+            #print("getting title")
             i = e.asDict(recursive=True)
-            print("got title")
+            #print("got title")
             asins.append(ratingtable.where(ratingtable.asin_index == int(i["asin_index"])).select("asin", "title").collect())
 
 
-        print(asins)
+        #print(asins)
 
         for e in asins:
             if len(e[0].title) != 0:
                 ret.append(e[0].title)
                 imgUrls.append(meta.where(e[0].asin == meta.asin).select("imUrl").limit(1).collect())
 
-        print(old_titles, imgUrls)
+        #print(old_titles, imgUrls)
 
         return render_template_string(recommendHTML, new_titles=ret, old_titles=old_titles, imgUrls=imgUrls, len=range(len(ret)))
 
@@ -202,7 +201,7 @@ def home():
     imgUrls = []
     for i in range(len(books)):
         imgUrls.append(meta.where(meta.asin == books[i].asin).select("imUrl").collect())
-        print(imgUrls[i][0].imUrl)
+        #print(imgUrls[i][0].imUrl)
 
     homeHTML = '''
     <!DOCTYPE html>
