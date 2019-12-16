@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+{% block list %}
+
+<h3>Search results: </h3>
+<table>
+    {% for i in result %}
+    <tr>
+      <td><img src="{{ i[0] }}" height="200px" width="150px" ></td>
+      <td><a href="{{ request.base_url + 'books/' + i[2] }}">{{ i[1] }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

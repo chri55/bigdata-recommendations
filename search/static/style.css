@@ -1,0 +1,39 @@
+div.cover, 
+div.description {
+	position: relative;
+	top: 10px;
+	width: 550px;
+}
+
+div.reviews {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 400px;
+}
+
+tr.spacer {
+	height: 20px;
+}
+
+#mainJumb{
+    background-color: green;
+}
+
+#mainHead{
+    color: white;
+}
+
+div.stats {
+	position: relative;
+  padding-top: 50px;
+}
+
+form{
+	padding-left: 50px;
+}
+
+body{
+	padding-left: 10px;
+	padding-right: 10px;
+}

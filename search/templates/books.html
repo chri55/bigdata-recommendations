@@ -1,0 +1,65 @@
+<!doctype html>
+<head>
+  <title>
+    {{ title }}
+  </title>
+  <link type="text/css" rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="title">
+    <h3>{{ title }}</h3>
+  </div>
+  <div class="cover">
+    <img src="{{ cover }}" alt="Broken" height="300px" width="200px"/>
+  </div>
+  <div class="description">
+    {% if description %}
+    <h3>
+      Description
+    </h3>
+    {{ description }}
+    {% else %}
+    <h3>
+      No Description found
+    </h3>
+    {% endif %}
+  </div>
+  <div class="reviews">
+    {% if review_no > 0 %}
+    <h3>
+      Reviews
+    </h3>
+    <table class="review">
+      {% for i in review %}
+      <tr>
+        <th>{{ i[0] }}</th>
+      </tr>
+      <tr>
+        <td><u>{{ i[1] }}</u></td>
+      </tr>
+      <tr>
+        <td>{{ i[2] }}</td>
+      </tr>
+      <tr>
+        <td>Overall rating: <b>{{ i[3] }}</b></td>
+      </tr>
+      <tr class="spacer">
+        {% endfor %}
+    </table>
+    {% else %}
+    <h3>
+      No Reviews found
+    </h3>
+    {% endif %}
+
+  </div>
+  <div class="stats">
+    Number of reviews: <b>{{ review_no }}</b>
+    <br>
+    Average rating: <b>{{ avg_rating }}</b>
+  </div>
+  <div class="amazon">
+    Find this book on Amazon: <a href="{{ 'https://www.amazon.com/s?k=' + asin }}">{{ title }}</a>
+</body>
+</html>
