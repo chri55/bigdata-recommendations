@@ -85,7 +85,7 @@ meta.cache()
 app = Flask(__name__)
 
 @app.route('/recommend', methods=['GET', 'POST'])  #can set first param to '/'
-def toyFunction():
+def recommendations():
     global ratingtable
     global meta
 
