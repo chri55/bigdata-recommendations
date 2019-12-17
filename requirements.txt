@@ -1,4 +1,0 @@
-Flask
-Werkzeug
-pyspark
-pandas
